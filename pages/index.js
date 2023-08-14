@@ -2,23 +2,30 @@ import { useState } from 'react';
 export default function Home() {
   const EmailSub = () => {
     const [email, setEmail] = useState('');
+    const [isSaved, setSaved] = useState(false);
     const handleSubmit = () => {
       fetch('https://api.airtable.com/v0/appgmQkzNpMpqrTdg/email', {
         method: 'post',
-        headers: { 'Content-Type': 'application/json' },
-        body: {
-          fields: {
-            email: email,
-          },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer keyeNXyxxuuYJY19w',
         },
+        body: JSON.stringify({ fields: { Email: email } }),
       })
-        .then((response) => response.json())
+        .then((response) => {
+          setSaved(true);
+          response.json();
+        })
         .catch((error) => {
+          setSaved(false);
           console.error(error);
         });
     };
     return (
       <div>
+        {isSaved ? (
+          <div className="bg-green-400 p-2">We will send you lesson</div>
+        ) : null}
         <div>
           <input
             type="text"
