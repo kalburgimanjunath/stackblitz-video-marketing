@@ -1,5 +1,22 @@
+import { useState } from 'react';
 export default function Home() {
   const EmailSub = () => {
+    const [email, setEmail] = useState('');
+    const handleSubmit = () => {
+      fetch('https://api.airtable.com/v0/appgmQkzNpMpqrTdg/email', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: {
+          fields: {
+            email: email,
+          },
+        },
+      })
+        .then((response) => response.json())
+        .catch((error) => {
+          console.error(error);
+        });
+    };
     return (
       <div>
         <div>
@@ -7,9 +24,14 @@ export default function Home() {
             type="text"
             className="text-field p-2 border-2 mt-2 mb-5 w-full"
             placeholder="Enter your Email id"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <button className="primary-button bg-violet-500 rounded-full p-2 text-white w-full">
+        <button
+          className="primary-button bg-violet-500 rounded-full p-2 text-white w-full"
+          onClick={handleSubmit}
+        >
           Send Me Lesson #1
         </button>
       </div>
